@@ -7,7 +7,7 @@ class Policy:
         self.tree = {}
 
 
-class VanilaMCTS:
+class VanilaMCTS(object):
     def __init__(self, n_iterations, depth=15, exploration_const=5.0, win_mark=3, tree=None, game_board=None, player=None):
         self.n_iterations = n_iterations
         self.depth = depth
@@ -89,7 +89,7 @@ class VanilaMCTS:
                 childs.append(child_id)
                 self.tree[child_id] = {"state": state, "player": next_turn, "child": [], "parent": leaf_node_id, "n": 0, "w": 0, "q": 0}
                 self.tree[leaf_node_id]["child"].append(action_idx)
-            rand_idx = np.random.randint(low=0, high=len(childs), size=1)[0]
+            rand_idx = np.random.randint(low=0, high=len(childs), size=1)
             child_node_id = childs[rand_idx[0]]
         return child_node_id
 
