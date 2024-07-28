@@ -1,6 +1,7 @@
 from env import env as game
 import numpy as np
-from my_mcts import VanilaMCTS
+# from my_mcts import VanilaMCTS
+from mct_try import VanilaMCTS
 import time
 
 env = game.GameState()
@@ -17,8 +18,10 @@ while not game_end:
     if current_player == mcts_player:
         print('game board')
         print(game_board)
-        mcts = VanilaMCTS(n_iterations=1500, depth=15, exploration_const=100, 
-                          game_board=game_board, player=current_player)
+        # mcts = VanilaMCTS(n_iterations=1500, depth=15, exploration_const=100, 
+        #                   game_board=game_board, player=current_player)
+        mcts = VanilaMCTS(num_iterations=1500, max_depth=15, explore_const=100, 
+                          initial_state=game_board, player=current_player)
         best_action, best_q, depth = mcts.solve()
         actione_onehot = np.zeros([state_size**2])
         actione_onehot[best_action] = 1
