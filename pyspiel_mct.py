@@ -1,5 +1,7 @@
 import random
 
-class MCTS:
-    def select_action(self, state):
-        return random.choice(state.legal_actions())
+
+
+
+def select_action(state):
+    return random.choice(state.legal_actions())

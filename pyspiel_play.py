@@ -1,6 +1,6 @@
 import pyspiel
 import numpy as np
-from pyspiel_mct import MCTS
+import pyspiel_mct as MCTS
 from pyspiel_gui import GUI
 
 
@@ -28,7 +28,7 @@ def get_human_action(state):
             print("Should be numeric value")
 
 
-def play_game(game, mcts_player, human_player):
+def play_game(game, human_player):
     state = game.new_initial_state()
     while not state.is_terminal():
         print_board(state)
@@ -36,7 +36,7 @@ def play_game(game, mcts_player, human_player):
         if current_player == human_player:
             action = get_human_action(state)
         else:
-            action = mcts_player.select_action(state)
+            action = MCTS.select_action(state)
 
         state.apply_action(action)
 
@@ -51,10 +51,8 @@ def play_game(game, mcts_player, human_player):
 
 def main():
     game = pyspiel.load_game("tic_tac_toe")
-    mcts = MCTS()
+    human_player = 1
+    play_game(game, human_player)
 
-    human_player = 0
-
-    play_game(game, mcts, human_player)
 
 main()
