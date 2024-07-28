@@ -212,9 +212,4 @@ class VanilaMCTS(object):
                 best_q = q
                 best_action = a
 
-
-        # with open('./tree_log.txt', 'a') as dest:
-        #     dest.write(str(self.tree) +'\n')
-        #     dest.write('---------------------------------')
-
         return best_action, best_q, depth_searched
