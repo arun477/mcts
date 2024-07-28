@@ -51,7 +51,7 @@ class VanilaMCTS:
         state = deepcopy(self.state_tree[selected_action_id])
         current_player = str(state['player'])
         child = []
-        avilable_next_actions = self.get_available_next_actions(state)
+        avilable_next_actions = self.get_available_next_actions(state['state'])
         for action in avilable_next_actions:
             action_id, action_position = action
             action_state = deepcopy(state)
@@ -72,17 +72,28 @@ class VanilaMCTS:
     
     def simulate_play(self, child_action_id):
         state = deepcopy(self.state_tree[child_action_id])
-        winner = self.is_terminal_state(self.state_tree[child_action_id])
+        winner = self.is_terminal_state(self.state_tree[child_action_id]['state'])
         if winner:
             return winner
         
         is_game_end = False
         while not is_game_end:
-            available_actions = self.get_available_next_actions(state)
+            available_actions = self.get_available_next_actions(state['state'])
+            random_action_choice = np.random.randint(low=0, high=len(available_actions), size=1)[0]
+            action_id, action_position = available_actions[random_action_choice]
+            if state['player'] == 'x':
+                state['player'] = 'o'
+                state['state'][action_position] = -1
+            else:
+                state['player'] = 'x'
+                state['state'][action_position] = 1
             
+            winner = self.is_terminal_state(state['state'])
+            if winner:
+                return winner
             
-            
-
+    
+                
 
     def choose_best_action(self):
         for _ in range(self.num_itearions):
