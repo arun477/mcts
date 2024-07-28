@@ -1,4 +1,5 @@
 import numpy as np
+from copy import deepcopy
 
 
 class VanilaMCTS:
@@ -57,6 +58,40 @@ class VanilaMCTS:
                         leaf_node_id = child_id
         depth = len(leaf_node_id)
         return leaf_node_id, depth
+    
+
+    def expansion(self, leaf_node_id):
+        leaf_state = self.tree[leaf_node_id]['state']
+        winner = self._is_terminal(leaf_state)
+        possible_actions = self._get_valid_actions(leaf_state)
+        child_node_id = leaf_node_id
+        if winner is None:
+            childs = []
+            for action_set in possible_actions:
+                action, action_idx = action_set
+                state = deepcopy(self.tree[leaf_node_id]['state'])
+                current_player = self.tree[leaf_node_id]['player']
+                if current_player == 'o':
+                    next_turn = 'x'
+                    state[action] = 1
+                else:
+                    next_turn = 'o'
+                    state[action] = -1
+                
+                child_id = leaf_node_id + (action_idx,)
+                childs.append(child_id)
+                self.tree[child_id] = {'state': state,
+                                        'player': next_turn,
+                                        'child': [],
+                                        'parent': leaf_node_id,
+                                        'n': 0, 'w': 0, 'q': 0}
+                self.tree[leaf_node_id]['child'].append(action_idx)
+            rand_idx = np.random.randint(low=0, high=len(childs), size=1)[0]
+            child_node_id = childs[rand_idx[0]]
+        return child_node_id
+            
+                
+        
 
     def solve(self):
         for _ in range(self.n_iterations):
