@@ -1,5 +1,6 @@
 import numpy as np
 from copy import deepcopy
+import json
 
 
 class Policy:
@@ -210,5 +211,10 @@ class VanilaMCTS(object):
             if q > best_q:
                 best_q = q
                 best_action = a
+
+
+        # with open('./tree_log.txt', 'a') as dest:
+        #     dest.write(str(self.tree) +'\n')
+        #     dest.write('---------------------------------')
 
         return best_action, best_q, depth_searched

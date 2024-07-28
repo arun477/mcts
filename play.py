@@ -15,12 +15,15 @@ current_player = 'o'
 while not game_end:
     actione_onehot = 0
     if current_player == mcts_player:
+        print('game board')
+        print(game_board)
         mcts = VanilaMCTS(n_iterations=1500, depth=15, exploration_const=100, 
                           game_board=game_board, player=current_player)
         best_action, best_q, depth = mcts.solve()
         actione_onehot = np.zeros([state_size**2])
         actione_onehot[best_action] = 1
         calculate_mcts = False
+        print('-----------------------------')
     
     game_board, check_valid_position, win_index, turn = env.step(actione_onehot)
     current_player = whos_turn[turn]
