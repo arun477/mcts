@@ -1,9 +1,9 @@
 # TicTacToe
-'''
+"""
 This is tictactoe.
 Win: O or X has to be 3 in a row (Horizontal or Vertical or Diagonal)
 boardsize: 3 x 3
-'''
+"""
 # By KyushikMin kyushikmin@gamil.com
 # http://mmc.hanyang.ac.kr
 
@@ -26,22 +26,22 @@ HALF_WINDOW_WIDTH = int(WINDOW_WIDTH / 2)
 HALF_WINDOW_HEIGHT = int(WINDOW_HEIGHT / 2)
 
 # Colors
-#				 R    G    B
-WHITE        = (255, 255, 255)
-BLACK        = (  0,   0,   0)
-RED          = (200,  72,  72)
-LIGHT_ORANGE = (198, 108,  58)
-ORANGE       = (180, 122,  48)
-GREEN        = ( 72, 160,  72)
-BLUE         = ( 66,  72, 200)
-YELLOW       = (162, 162,  42)
-NAVY         = ( 75,   0, 130)
-PURPLE       = (143,   0, 255)
-BADUK        = (220, 179,  92)
+# R    G    B
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (200, 72, 72)
+LIGHT_ORANGE = (198, 108, 58)
+ORANGE = (180, 122, 48)
+GREEN = (72, 160, 72)
+BLUE = (66, 72, 200)
+YELLOW = (162, 162, 42)
+NAVY = (75, 0, 130)
+PURPLE = (143, 0, 255)
+BADUK = (220, 179, 92)
 
 
 def ReturnName():
-    return 'tictactoe'
+    return "tictactoe"
 
 
 def Return_Num_Action():
@@ -61,11 +61,11 @@ class GameState:
 
         DISPLAYSURF = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-        pygame.display.set_caption('TicTacToe')
+        pygame.display.set_caption("TicTacToe")
 
-        BASIC_FONT = pygame.font.Font('freesansbold.ttf', 16)
-        TITLE_FONT = pygame.font.Font('freesansbold.ttf', 24)
-        GAMEOVER_FONT = pygame.font.Font('freesansbold.ttf', 48)
+        BASIC_FONT = pygame.font.Font("freesansbold.ttf", 16)
+        TITLE_FONT = pygame.font.Font("freesansbold.ttf", 24)
+        GAMEOVER_FONT = pygame.font.Font("freesansbold.ttf", 48)
 
         # Set initial parameters
         self.init = False
@@ -90,13 +90,9 @@ class GameState:
         self.Y_coord = []
 
         for i in range(GAMEBOARD_SIZE):
-            self.X_coord.append(
-                MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)) + int(
-                    GRID_SIZE / (GAMEBOARD_SIZE * 2)))
-            self.Y_coord.append(
-                TOP_MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)) + int(
-                    GRID_SIZE / (GAMEBOARD_SIZE * 2)))
-            
+            self.X_coord.append(MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)) + int(GRID_SIZE / (GAMEBOARD_SIZE * 2)))
+            self.Y_coord.append(TOP_MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)) + int(GRID_SIZE / (GAMEBOARD_SIZE * 2)))
+
     def get_available_next_actions(self, leaf_state):
         actions = []
         count = 0
@@ -107,7 +103,16 @@ class GameState:
                     actions.append([(i, j), count])
                 count += 1
         return actions
-    
+
+    def get_reward(self, winner):
+        if winner == "draw":
+            reward = 0
+        elif winner == "x":
+            reward = 1
+        else:
+            reward = -1
+        return reward
+
     def is_terminal_state(self, leaf_state, state_tree):
         def __who_wins(sums, win_mark):
             if np.any(sums == win_mark):
@@ -140,12 +145,12 @@ class GameState:
                 window = leaf_state[row : row + window_size, col : col + window_size]
                 winner = __is_terminal_in_conv(window, win_mark)
                 if winner is not None:
-                    return winner
+                    return winner, self.get_reward(winner)
 
         if not np.any(leaf_state == 0):
-            return "draw"
+            return "draw", self.get_reward("draw")
 
-        return None
+        return None, None
 
     def step(self, input_):  # Game loop
         # Initial settings
@@ -187,16 +192,13 @@ class GameState:
         if mouse_pos != 0:
             for i in range(len(self.X_coord)):
                 for j in range(len(self.Y_coord)):
-                    if (self.X_coord[i] - 30 < mouse_pos[0] < self.X_coord[
-                        i] + 30) and (self.Y_coord[j] - 30 < mouse_pos[1] <
-                                              self.Y_coord[j] + 30):
+                    if (self.X_coord[i] - 30 < mouse_pos[0] < self.X_coord[i] + 30) and (self.Y_coord[j] - 30 < mouse_pos[1] < self.Y_coord[j] + 30):
                         check_valid_pos = True
                         x_index = i
                         y_index = j
 
                         # If selected spot is already occupied, it is not valid move!
-                        if self.gameboard[y_index, x_index] == 1 or \
-                                        self.gameboard[y_index, x_index] == -1:
+                        if self.gameboard[y_index, x_index] == 1 or self.gameboard[y_index, x_index] == -1:
                             check_valid_pos = False
 
         # If vs mode and MCTS works
@@ -253,83 +255,62 @@ class GameState:
 
         # Horizontal Lines
         for i in range(GAMEBOARD_SIZE + 1):
-            pygame.draw.line(DISPLAYSURF, WHITE, (
-            MARGIN, TOP_MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE))), (
-                             WINDOW_WIDTH - (MARGIN), TOP_MARGIN + i * int(
-                                 GRID_SIZE / (GAMEBOARD_SIZE))), 1)
+            pygame.draw.line(DISPLAYSURF, WHITE, (MARGIN, TOP_MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE))), (WINDOW_WIDTH - (MARGIN), TOP_MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE))), 1)
 
         # Vertical Lines
         for i in range(GAMEBOARD_SIZE + 1):
-            pygame.draw.line(DISPLAYSURF, WHITE, (
-            MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)), TOP_MARGIN), (
-                             MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)),
-                             TOP_MARGIN + GRID_SIZE), 1)
+            pygame.draw.line(DISPLAYSURF, WHITE, (MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)), TOP_MARGIN), (MARGIN + i * int(GRID_SIZE / (GAMEBOARD_SIZE)), TOP_MARGIN + GRID_SIZE), 1)
 
         # Draw center circle
-        pygame.draw.circle(DISPLAYSURF, WHITE, (
-        MARGIN + 4 * int(GRID_SIZE / (GAMEBOARD_SIZE)),
-        TOP_MARGIN + 4 * int(GRID_SIZE / (GAMEBOARD_SIZE))), 5, 0)
+        pygame.draw.circle(DISPLAYSURF, WHITE, (MARGIN + 4 * int(GRID_SIZE / (GAMEBOARD_SIZE)), TOP_MARGIN + 4 * int(GRID_SIZE / (GAMEBOARD_SIZE))), 5, 0)
 
         # Draw marks
         for i in range(self.gameboard.shape[0]):
             for j in range(self.gameboard.shape[1]):
                 if self.gameboard[i, j] == 1:
-                    pygame.draw.circle(DISPLAYSURF, WHITE,
-                                       (self.X_coord[j], self.Y_coord[i]), 30,
-                                       0)
+                    pygame.draw.circle(DISPLAYSURF, WHITE, (self.X_coord[j], self.Y_coord[i]), 30, 0)
 
                 if self.gameboard[i, j] == -1:
-                    pygame.draw.line(DISPLAYSURF, WHITE, (
-                    self.X_coord[j] - 30, self.Y_coord[i] - 30), (
-                                     self.X_coord[j] + 30,
-                                     self.Y_coord[i] + 30), 10)
-                    pygame.draw.line(DISPLAYSURF, WHITE, (
-                    self.X_coord[j] - 30, self.Y_coord[i] + 30), (
-                                     self.X_coord[j] + 30,
-                                     self.Y_coord[i] - 30), 10)
+                    pygame.draw.line(DISPLAYSURF, WHITE, (self.X_coord[j] - 30, self.Y_coord[i] - 30), (self.X_coord[j] + 30, self.Y_coord[i] + 30), 10)
+                    pygame.draw.line(DISPLAYSURF, WHITE, (self.X_coord[j] - 30, self.Y_coord[i] + 30), (self.X_coord[j] + 30, self.Y_coord[i] - 30), 10)
 
     # Display title
     def title_msg(self):
-        titleSurf = TITLE_FONT.render('TicTacToe', True, WHITE)
+        titleSurf = TITLE_FONT.render("TicTacToe", True, WHITE)
         titleRect = titleSurf.get_rect()
         titleRect.topleft = (MARGIN, 10)
         DISPLAYSURF.blit(titleSurf, titleRect)
 
     # Display rule
     def rule_msg(self):
-        ruleSurf1 = BASIC_FONT.render('Win: O or X mark has to be 3 in a row',
-                                      True, WHITE)
+        ruleSurf1 = BASIC_FONT.render("Win: O or X mark has to be 3 in a row", True, WHITE)
         ruleRect1 = ruleSurf1.get_rect()
         ruleRect1.topleft = (MARGIN, 50)
         DISPLAYSURF.blit(ruleSurf1, ruleRect1)
 
-        ruleSurf2 = BASIC_FONT.render('(horizontal, vertical, diagonal)', True,
-                                      WHITE)
+        ruleSurf2 = BASIC_FONT.render("(horizontal, vertical, diagonal)", True, WHITE)
         ruleRect2 = ruleSurf1.get_rect()
         ruleRect2.topleft = (MARGIN, 70)
         DISPLAYSURF.blit(ruleSurf2, ruleRect2)
 
     # Display scores
     def score_msg(self):
-        scoreSurf1 = BASIC_FONT.render('Score: ', True, WHITE)
+        scoreSurf1 = BASIC_FONT.render("Score: ", True, WHITE)
         scoreRect1 = scoreSurf1.get_rect()
         scoreRect1.topleft = (MARGIN, 105)
         DISPLAYSURF.blit(scoreSurf1, scoreRect1)
 
-        scoreSurf2 = BASIC_FONT.render('O = ' + str(self.o_win) + '  vs  ',
-                                       True, WHITE)
+        scoreSurf2 = BASIC_FONT.render("O = " + str(self.o_win) + "  vs  ", True, WHITE)
         scoreRect2 = scoreSurf2.get_rect()
         scoreRect2.topleft = (scoreRect1.midright[0], 105)
         DISPLAYSURF.blit(scoreSurf2, scoreRect2)
 
-        scoreSurf3 = BASIC_FONT.render('X = ' + str(self.x_win) + '  vs  ',
-                                       True, WHITE)
+        scoreSurf3 = BASIC_FONT.render("X = " + str(self.x_win) + "  vs  ", True, WHITE)
         scoreRect3 = scoreSurf3.get_rect()
         scoreRect3.topleft = (scoreRect2.midright[0], 105)
         DISPLAYSURF.blit(scoreSurf3, scoreRect3)
 
-        scoreSurf4 = BASIC_FONT.render('Draw = ' + str(self.count_draw), True,
-                                       WHITE)
+        scoreSurf4 = BASIC_FONT.render("Draw = " + str(self.count_draw), True, WHITE)
         scoreRect4 = scoreSurf4.get_rect()
         scoreRect4.topleft = (scoreRect3.midright[0], 105)
         DISPLAYSURF.blit(scoreSurf4, scoreRect4)
@@ -353,21 +334,20 @@ class GameState:
         for row in range(GAMEBOARD_SIZE):
             for col in range(GAMEBOARD_SIZE - WIN_MARK + 1):
                 # Black win!
-                if np.sum(self.gameboard[row, col:col + WIN_MARK]) == WIN_MARK:
+                if np.sum(self.gameboard[row, col : col + WIN_MARK]) == WIN_MARK:
                     return 1
                 # White win!
-                if np.sum(self.gameboard[row, col:col + WIN_MARK]) == -WIN_MARK:
+                if np.sum(self.gameboard[row, col : col + WIN_MARK]) == -WIN_MARK:
                     return 2
 
         # Check four stones in a colum (Vertical)
         for row in range(GAMEBOARD_SIZE - WIN_MARK + 1):
             for col in range(GAMEBOARD_SIZE):
                 # Black win!
-                if np.sum(self.gameboard[row: row + WIN_MARK, col]) == WIN_MARK:
+                if np.sum(self.gameboard[row : row + WIN_MARK, col]) == WIN_MARK:
                     return 1
                 # White win!
-                if np.sum(
-                        self.gameboard[row: row + WIN_MARK, col]) == -WIN_MARK:
+                if np.sum(self.gameboard[row : row + WIN_MARK, col]) == -WIN_MARK:
                     return 2
 
         # Check four stones in diagonal (Diagonal)
@@ -462,5 +442,5 @@ class GameState:
             self.count_draw += 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
