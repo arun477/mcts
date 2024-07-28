@@ -55,12 +55,14 @@ class VanilaMCTS:
         for action in avilable_next_actions:
             action_id, action_position = action
             action_state = deepcopy(state)
+            action_state['parent'] = selected_action_id
             if current_player == 'x':
-                state['player'] = 'o'
-                state['state'][action_position] = -1
+                action_state['player'] = 'o'
+                action_state['state'][action_position] = -1
             else:
-                state['player'] = 'x'
-                state['state'][action_position] = 1
+                action_state['player'] = 'x'
+                action_state['state'][action_position] = 1
+
             self.state_tree[selected_action_id]['child'].append(action_id)
             child.append(selected_action_id + action_id)
             self.state_tree[selected_action_id + action_id] = action_state
@@ -93,7 +95,21 @@ class VanilaMCTS:
                 return winner
             
     
-                
+    def backprop_stats(self, child_action_id, winner):
+        if winner == 'draw':
+            reward = 0
+        elif winner == 'x':
+            reward = 1
+        else:
+            reward = -1
+        while True:
+            self.state_tree[child_action_id]['n'] += 1
+            self.state_tree[child_action_id]['w'] += reward
+            self.state_tree[child_action_id]['q'] = self.state_tree[child_action_id]['w'] / self.state_tree[child_action_id]['n']
+            child_action_id = self.state_tree[child_action_id]['parent']
+            if child_action_id is None:
+                break
+              
 
     def choose_best_action(self):
         for _ in range(self.num_itearions):
