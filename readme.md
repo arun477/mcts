@@ -78,7 +78,7 @@ After each AI move, the program displays a heatmap showing the AI's evaluation o
 
 ## Contributing
 
-Contributions to improve the AI, enhance the GUI, or optimize the code are welcome. Please feel free to submit pull requests or open issues for bugs and feature requests.
+For educational purposes and tinkering.
 
 ## License
 
