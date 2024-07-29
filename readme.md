@@ -1,6 +1,6 @@
 # Tic-Tac-Toe with Monte Carlo Tree Search
 
-This project implements a Tic-Tac-Toe game with an AI opponent using the Monte Carlo Tree Search (MCTS) algorithm. The game features a graphical user interface built with Pygame, allowing human players to compete against the AI.
+This project implements a Tic-Tac-Toe game with an Monte Carlo Tree Search opponent using the Monte Carlo Tree Search (MCTS) algorithm. The game features a graphical user interface built with Pygame, allowing human players to compete against the Monte Carlo Tree Search.
 
 
 ## Game Board
@@ -18,7 +18,7 @@ This project implements a Tic-Tac-Toe game with an AI opponent using the Monte C
 - Tic-Tac-Toe game implementation
 - Monte Carlo Tree Search
 - Pygame-based graphical user interface
-- Visual representation of AI's move evaluation
+- Visual representation of Monte Carlo Tree Search's move evaluation
 
 ## Requirements
 
@@ -45,7 +45,7 @@ To start the game, run the main script:
 python main.py
 ```
 
-The game will open in a Pygame window. The human player is 'O', and the AI is 'X'. Click on an empty cell to make your move. The AI will automatically make its move after you.
+The game will open in a Pygame window. The human player is 'O', and the Monte Carlo Tree Search is 'X'. Click on an empty cell to make your move. The Monte Carlo Tree Search will automatically make its move after you.
 
 ## Files
 
@@ -56,25 +56,25 @@ The game will open in a Pygame window. The human player is 'O', and the AI is 'X
 ## How it Works
 
 1. The game starts with an empty 3x3 grid.
-2. Players take turns placing their symbol ('O' for human, 'X' for AI) in empty cells.
-3. The AI uses MCTS to evaluate possible moves and choose the best one.
-4. After each AI move, a heatmap is displayed showing the AI's evaluation of different positions.
+2. Players take turns placing their symbol ('O' for human, 'X' for Monte Carlo Tree Search) in empty cells.
+3. The Monte Carlo Tree Search uses MCTS to evaluate possible moves and choose the best one.
+4. After each Monte Carlo Tree Search move, a heatmap is displayed showing the Monte Carlo Tree Search's evaluation of different positions.
 5. The game ends when a player wins or the board is full (draw).
 
 ## Monte Carlo Tree Search
 
-The AI uses MCTS to determine its moves:
+The Monte Carlo Tree Search uses MCTS to determine its moves:
 
 1. Selection: Choose a promising leaf node in the game tree.
 2. Expansion: Add child nodes to the selected node.
 3. Simulation: Play out random games from the new nodes.
 4. Backpropagation: Update node statistics based on simulation results.
 
-The AI repeats this process for a set number of iterations before choosing the best move.
+The Monte Carlo Tree Search repeats this process for a set number of iterations before choosing the best move.
 
 ## Visualization
 
-After each AI move, the program displays a heatmap showing the AI's evaluation of different board positions. Warmer colors (red) indicate moves the AI considers more favorable, while cooler colors (blue) represent less favorable moves.
+After each Monte Carlo Tree Search move, the program displays a heatmap showing the Monte Carlo Tree Search's evaluation of different board positions. Warmer colors (red) indicate moves the Monte Carlo Tree Search considers more favorable, while cooler colors (blue) represent less favorable moves.
 
 ## Contributing
 
