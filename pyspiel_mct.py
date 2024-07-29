@@ -38,7 +38,7 @@ def select_leaf_node(state_tree, node_id, total_play):
 
 
 def expand_node(selected_leaf_node_id, state_tree):
-    game_state = state_tree["game_state"].clone()
+    game_state = state_tree[selected_leaf_node_id]["game_state"].clone()
     if game_state.is_terminal():
         return selected_leaf_node_id
 
@@ -50,14 +50,14 @@ def expand_node(selected_leaf_node_id, state_tree):
         child_id = selected_leaf_node_id + (action,)
         state_tree[child_id] = get_initial_values(next_game_state, parent=selected_leaf_node_id)
         child_ids.append(child_id)
-        state_tree[selected_leaf_node_id].append(action)
+        state_tree[selected_leaf_node_id]['child'].append(action)
 
     return random.choice(child_ids)
 
 
 def simulate_play(unexplored_child_node_id, state_tree, _globals):
     _globals["total_play"] += 1
-    game_state = state_tree[unexplored_child_node_id]
+    game_state = state_tree[unexplored_child_node_id]['game_state']
     if game_state.is_terminal():
         return game_state.rewards()
     game_state = game_state.clone()
@@ -90,6 +90,8 @@ def choose_best_action(root_id, state_tree):
 
 
 def select_action(game_state):
+    # return random.choice(game_state.legal_actions())
+
     _globals = {"total_play": 0}
     root_id = (0,)
     state_tree = get_state_tree(game_state.clone(), root_id)
@@ -101,4 +103,4 @@ def select_action(game_state):
     best_action = choose_best_action(root_id, state_tree)
     return best_action
 
-    return random.choice(game_state.legal_actions())
+    
