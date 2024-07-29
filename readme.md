@@ -2,6 +2,17 @@
 
 This project implements a Tic-Tac-Toe game with an AI opponent using the Monte Carlo Tree Search (MCTS) algorithm. The game features a graphical user interface built with Pygame, allowing human players to compete against the AI.
 
+
+## Game Board
+<img src="https://github.com/user-attachments/assets/eab0d191-60db-4b21-9701-77f6ec68474a" alt="Game Board" width="300">
+
+## Terminal Output
+<img src="https://github.com/user-attachments/assets/bc6eb7c8-5956-4a42-b5f7-ae6e850f843f" alt="Terminal Output" width="600">
+
+## Board Scores
+<img src="https://github.com/user-attachments/assets/07fa9522-ccc7-48c4-be5b-b0e683d99695" alt="Board Scores" width="600">
+
+
 ## Features
 
 - Tic-Tac-Toe game implementation
