@@ -2,7 +2,8 @@ import random
 import numpy as np
 from copy import deepcopy
 
-_exploit_const = 5
+_explore_const = 5
+_num_iterations = 100
 
 
 def get_initial_values(game_state, parent):
@@ -16,9 +17,9 @@ def get_state_tree(game_state, root_id):
 def get_ucb_score(child_id, state_tree, total_play):
     child_state = state_tree[child_id]
     n, w = child_state["n"], child_state["w"]
-    exploration_val = w / n
-    exploit_val = np.sqrt(np.log(total_play) / n)
-    return exploration_val + _exploit_const * exploit_val
+    exploit_val = w / n
+    exploration_val = np.sqrt(np.log(total_play) / n)
+    return exploit_val + _explore_const * exploration_val
 
 
 def select_leaf_node(state_tree, node_id, total_play):
@@ -50,14 +51,14 @@ def expand_node(selected_leaf_node_id, state_tree):
         child_id = selected_leaf_node_id + (action,)
         state_tree[child_id] = get_initial_values(next_game_state, parent=selected_leaf_node_id)
         child_ids.append(child_id)
-        state_tree[selected_leaf_node_id]['child'].append(action)
+        state_tree[selected_leaf_node_id]["child"].append(action)
 
     return random.choice(child_ids)
 
 
 def simulate_play(unexplored_child_node_id, state_tree, _globals):
     _globals["total_play"] += 1
-    game_state = state_tree[unexplored_child_node_id]['game_state']
+    game_state = state_tree[unexplored_child_node_id]["game_state"]
     if game_state.is_terminal():
         return game_state.rewards()
     game_state = game_state.clone()
@@ -91,16 +92,16 @@ def choose_best_action(root_id, state_tree):
 
 def select_action(game_state):
     # return random.choice(game_state.legal_actions())
-
     _globals = {"total_play": 0}
     root_id = (0,)
     state_tree = get_state_tree(game_state.clone(), root_id)
-    selected_leaf_node_id = select_leaf_node(state_tree, root_id, _globals["total_play"])
-    unexplored_child_node_id = expand_node(selected_leaf_node_id, state_tree)
-    rewards = simulate_play(unexplored_child_node_id, state_tree, _globals)
-    reward = rewards[game_state.current_player()]
-    backprop(unexplored_child_node_id, reward, state_tree)
+
+    for _ in range(_num_iterations):
+        selected_leaf_node_id = select_leaf_node(state_tree, root_id, _globals["total_play"])
+        unexplored_child_node_id = expand_node(selected_leaf_node_id, state_tree)
+        rewards = simulate_play(unexplored_child_node_id, state_tree, _globals)
+        reward = rewards[game_state.current_player()]
+        backprop(unexplored_child_node_id, reward, state_tree)
+
     best_action = choose_best_action(root_id, state_tree)
     return best_action
-
-    
