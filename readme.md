@@ -45,7 +45,7 @@ To start the game, run the main script:
 python main.py
 ```
 
-The game will open in a Pygame window. The human player is 'O', and the Monte Carlo Tree Search is 'X'. Click on an empty cell to make your move. The Monte Carlo Tree Search will automatically make its move after you.
+The game will open in a Pygame window. The human player is 'O', and the Monte Carlo Tree Search is 'X'. Enter your move in the terminal. The Monte Carlo Tree Search will automatically make its move after you.
 
 ## Files
 
