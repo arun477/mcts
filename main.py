@@ -1,7 +1,7 @@
 import pyspiel
 import numpy as np
-import pyspiel_mct as MCTS
-from pyspiel_gui import GUI
+import mcts as MCTS
+from gui import GUI
 
 
 gui = GUI()
