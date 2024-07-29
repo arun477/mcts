@@ -93,30 +93,25 @@ def choose_best_action(root_id, state_tree):
 def plot_score_grid(scores):
     fig, ax = plt.subplots()
 
-    # Create a heatmap
-    cax = ax.matshow(scores, cmap='coolwarm')
+    cax = ax.matshow(scores, cmap="coolwarm")
 
-    # Add colorbar
     fig.colorbar(cax)
 
-    # Annotate each cell with the score
     for (i, j), val in np.ndenumerate(scores):
-        ax.text(j, i, f'{val:.2f}', ha='center', va='center', color='black')
+        ax.text(j, i, f"{val:.2f}", ha="center", va="center", color="black")
 
-    # Set x and y ticks
     ax.set_xticks(np.arange(3))
     ax.set_yticks(np.arange(3))
 
-    # Set tick labels
-    ax.set_xticklabels(['0', '1', '2'])
-    ax.set_yticklabels(['0', '1', '2'])
+    ax.set_xticklabels(["0", "1", "2"])
+    ax.set_yticklabels(["0", "1", "2"])
 
-    # Set labels
-    ax.set_xlabel('Column')
-    ax.set_ylabel('Row')
+    ax.set_xlabel("Column")
+    ax.set_ylabel("Row")
 
-    plt.title('Tic-Tac-Toe Move Scores')
+    plt.title("Tic-Tac-Toe Move Scores")
     plt.show()
+
 
 def plot_board_scores(root_id, state_tree):
     q_values = np.zeros(9)
@@ -127,7 +122,6 @@ def plot_board_scores(root_id, state_tree):
     q_values = q_values.reshape(3, 3)
     print(q_values.reshape(3, 3))
     plot_score_grid(q_values)
-
 
 
 def select_action(game_state):
