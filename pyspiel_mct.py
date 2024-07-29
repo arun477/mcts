@@ -1,6 +1,7 @@
 import random
 import numpy as np
-from copy import deepcopy
+import matplotlib.pyplot as plt
+
 
 _explore_const = 5
 _num_iterations = 100
@@ -89,6 +90,46 @@ def choose_best_action(root_id, state_tree):
     return best_action
 
 
+def plot_score_grid(scores):
+    fig, ax = plt.subplots()
+
+    # Create a heatmap
+    cax = ax.matshow(scores, cmap='coolwarm')
+
+    # Add colorbar
+    fig.colorbar(cax)
+
+    # Annotate each cell with the score
+    for (i, j), val in np.ndenumerate(scores):
+        ax.text(j, i, f'{val:.2f}', ha='center', va='center', color='black')
+
+    # Set x and y ticks
+    ax.set_xticks(np.arange(3))
+    ax.set_yticks(np.arange(3))
+
+    # Set tick labels
+    ax.set_xticklabels(['0', '1', '2'])
+    ax.set_yticklabels(['0', '1', '2'])
+
+    # Set labels
+    ax.set_xlabel('Column')
+    ax.set_ylabel('Row')
+
+    plt.title('Tic-Tac-Toe Move Scores')
+    plt.show()
+
+def plot_board_scores(root_id, state_tree):
+    q_values = np.zeros(9)
+    for action in state_tree[root_id]["child"]:
+        child_id = root_id + (action,)
+        q = state_tree[child_id]["q"]
+        q_values[action] = q
+    q_values = q_values.reshape(3, 3)
+    print(q_values.reshape(3, 3))
+    plot_score_grid(q_values)
+
+
+
 def select_action(game_state):
     root_id = (0,)
     state_tree = get_state_tree(game_state.clone(), root_id)
@@ -100,5 +141,6 @@ def select_action(game_state):
         reward = rewards[game_state.current_player()]
         backprop(unexplored_child_node_id, reward, state_tree)
 
+    plot_board_scores(root_id, state_tree)
     best_action = choose_best_action(root_id, state_tree)
     return best_action
